@@ -2,6 +2,10 @@ export class Grid {
   size;
   wordSelectMode;
   selectedCells;
+  firstSelectedCell;
+  gridArea;
+  words;
+  foundWords;
 
   constructor(size = 10) {
     this.size = size;
@@ -10,6 +14,7 @@ export class Grid {
     this.firstSelectedCell;
     this.gridArea = {};
     this.words = [];
+    this.foundWords = [];
   }
 
   getCellsInLine(firstCell, currentCell) {
@@ -80,7 +85,9 @@ export class Grid {
     this.gridArea.appendChild(tbl);
 
     this.gridArea.addEventListener("mousedown", (event) => {
+      //Avoid reacting to any other element than the cells in the table.
       if (event.target.tagName != "TD") return;
+
       this.wordSelectMode = true;
       this.firstSelectedCell = event.target;
     });
@@ -88,6 +95,7 @@ export class Grid {
     this.gridArea.addEventListener("mousemove", (event) => {
       //Avoid reacting to any other element than the cells in the table.
       if (event.target.tagName != "TD") return;
+
       //TODO Throttle?
       if (this.wordSelectMode) {
         const lastSelectedCell = this.selectedCells.at(-1);
@@ -111,11 +119,25 @@ export class Grid {
     });
 
     this.gridArea.addEventListener("mouseup", (event) => {
+      //Avoid reacting to any other element than the cells in the table.
       if (event.target.tagName != "TD") return;
+
       this.wordSelectMode = false;
-      this.selectedCells.forEach((cell) => {
-        cell.classList.remove("selected");
-      });
+      const selectedWord = this.selectedCells.reduce((word, cell) => {
+        return (word += cell.getAttribute("letter"));
+      }, "");
+      const selectedWordReversed = selectedWord.split("").reverse().join("");
+
+      if (this.words.indexOf(selectedWord) !== -1) {
+        this.foundWords.push(selectedWord);
+      } else if (this.words.indexOf(selectedWordReversed) !== -1) {
+        this.foundWords.push(selectedWordReversed);
+      } else {
+        this.selectedCells.forEach((cell) => {
+          cell.classList.remove("selected");
+        });
+      }
+      this.selectedCells = [];
     });
   }
 }
