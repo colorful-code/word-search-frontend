@@ -6,6 +6,7 @@ const grid = new Grid();
 newGameBtn.addEventListener("click", async () => {
   //grid.size = SET SIZE OF GRID FROM INPUT
   let result = await fetchGrid(["ONE", "TWO", "THREE"]);
+  grid.words = ["ONE", "TWO", "THREE"];
   grid.renderGrid(result);
 });
 
