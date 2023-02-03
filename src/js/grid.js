@@ -17,6 +17,16 @@ export class Grid {
     this.foundWords = [];
   }
 
+  init(size = 10) {
+    this.size = size;
+    this.wordSelectMode = false;
+    this.selectedCells = [];
+    this.firstSelectedCell;
+    this.gridArea = {};
+    this.words = [];
+    this.foundWords = [];
+  }
+
   getCellsInLine(firstCell, currentCell) {
     let start = {
       x: parseInt(firstCell.getAttribute("pos-x")),
@@ -27,11 +37,10 @@ export class Grid {
       y: parseInt(currentCell.getAttribute("pos-y")),
     };
     let cellsInRange = [];
-
     if (start.x > end.x || start.y > end.y) {
-      //TODO Swap doesnt work diagonally when going from bl to tr or vice versa
       [end, start] = [start, end]; //Swap the cells with array destructuring when moving in the inverse direction
     }
+
     if (start.y === end.y) {
       for (let i = start.x; i <= end.x; i++) {
         cellsInRange.push(
@@ -45,12 +54,21 @@ export class Grid {
         );
       }
     } else if (start.x - end.x === start.y - end.y) {
-      const delta = end.x - start.x; //delta is same regardless if we use x or y.
-      for (let i = 0; i <= delta; i++) {
+      const distance = end.x - start.x; //distance is same regardless if we use x or y.
+      for (let i = 0; i <= distance; i++) {
         cellsInRange.push(
           this.gridArea.querySelector(
             `td[pos-x="${start.x + i}"][pos-y="${start.y + i}"]`
           )
+        );
+      }
+    } else if (start.x - end.x === -1 * (start.y - end.y)) {
+      const distance = Math.abs(end.x - start.x); //Must take absolute value for distance as it can be negative.
+      for (let i = 0; i <= distance; i++) {
+        const x = start.x + i * (start.x - end.x > 0 ? -1 : 1);
+        const y = start.y + i * (start.y - end.y > 0 ? -1 : 1);
+        cellsInRange.push(
+          this.gridArea.querySelector(`td[pos-x="${x}"][pos-y="${y}"]`)
         );
       }
     }

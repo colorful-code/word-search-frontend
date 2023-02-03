@@ -13,8 +13,15 @@
   </head>
   <body>
     <h1>Word Search game</h1>
-    <input id="addWord" type="text" />
-    <button class="new-game">Generate new game</button>
+
+    <label>Add a word to search for:</label>
+    <input id="word" type="text" />
+    <button class="add-word">Add word</button>
+
+    <label>Grid size:</label>
+    <input id="grid-size" type="text" value="10" />
+
+    <button class="generate-grid">Generate new game</button>
     <section class="grid-area"></section>
 
     <script src="js/index.js" type="module"></script>
