@@ -10,8 +10,17 @@
     td {
       width: 20px;
       height: 20px;
+      text-align: center;
+      &.found {
+        color: rgb(8, 88, 5);
+        background-color: rgb(155, 248, 155);
+        border-radius: 40%;
+      }
       &.selected {
         color: rgb(202, 80, 24);
+        background-color: rgb(248, 208, 155);
+        font-weight: bold;
+        border-radius: 20%;
       }
     }
   }

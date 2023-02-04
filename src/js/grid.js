@@ -132,7 +132,11 @@ export class Grid {
           this.firstSelectedCell,
           event.target
         );
-        this.selectedCells.forEach((cell) => cell.classList.add("selected"));
+        this.selectedCells.forEach((cell) => {
+          if (!cell.classList.contains("found")) {
+            cell.classList.add("selected");
+          }
+        });
       }
     });
 
@@ -148,14 +152,22 @@ export class Grid {
 
       if (this.words.indexOf(selectedWord) !== -1) {
         this.foundWords.push(selectedWord);
+        this.restyleCells(this.selectedCells, "selected", "found");
       } else if (this.words.indexOf(selectedWordReversed) !== -1) {
         this.foundWords.push(selectedWordReversed);
+        this.restyleCells(this.selectedCells, "selected", "found");
       } else {
-        this.selectedCells.forEach((cell) => {
-          cell.classList.remove("selected");
-        });
+        this.selectedCells.forEach((cell) => cell.classList.remove("selected"));
       }
       this.selectedCells = [];
+    });
+  }
+
+  restyleCells(cells, oldStyle, newStyle) {
+    cells.forEach((cell) => {
+      if (oldStyle && newStyle) {
+        cell.classList.replace(oldStyle, newStyle);
+      }
     });
   }
 }
