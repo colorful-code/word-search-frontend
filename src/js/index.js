@@ -47,9 +47,7 @@ wordInput.addEventListener("input", (event) => {
     addWordBtn.disabled = true;
     document
       .querySelectorAll(".active-warning")
-      .forEach((element) =>
-        element.classList.replace("active-warning", "hidden-warning")
-      );
+      .forEach((element) => element.classList.replace("active-warning", "hidden-warning"));
     return;
   }
 
@@ -68,9 +66,7 @@ wordInput.addEventListener("input", (event) => {
     charWarningLabel.classList.replace("active-warning", "hidden-warning");
   }
 
-  tooLong || !validLetters
-    ? (addWordBtn.disabled = true)
-    : (addWordBtn.disabled = false);
+  tooLong || !validLetters ? (addWordBtn.disabled = true) : (addWordBtn.disabled = false);
 });
 
 sizeInput.addEventListener("input", (event) => {
@@ -93,9 +89,7 @@ newGridBtn.addEventListener("click", async () => {
 
 async function fetchGrid(grid) {
   const commaSeperatedWords = grid.words.join(",");
-  const response = await fetch(
-    `http://localhost:8080/wordgrid?gridSize=${grid.size}&words=${commaSeperatedWords}`
-  );
+  const response = await fetch(`http://localhost:8080/wordgrid?gridSize=${grid.size}&words=${commaSeperatedWords}`);
   const result = await response.text();
   return result.split(" ");
 }

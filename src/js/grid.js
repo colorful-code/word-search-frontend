@@ -43,33 +43,23 @@ export class Grid {
 
     if (start.y === end.y) {
       for (let i = start.x; i <= end.x; i++) {
-        cellsInRange.push(
-          this.gridArea.querySelector(`td[pos-x="${i}"][pos-y="${end.y}"]`)
-        );
+        cellsInRange.push(this.gridArea.querySelector(`td[pos-x="${i}"][pos-y="${end.y}"]`));
       }
     } else if (start.x === end.x) {
       for (let i = start.y; i <= end.y; i++) {
-        cellsInRange.push(
-          this.gridArea.querySelector(`td[pos-x="${end.x}"][pos-y="${i}"]`)
-        );
+        cellsInRange.push(this.gridArea.querySelector(`td[pos-x="${end.x}"][pos-y="${i}"]`));
       }
     } else if (start.x - end.x === start.y - end.y) {
       const distance = end.x - start.x; //distance is same regardless if we use x or y.
       for (let i = 0; i <= distance; i++) {
-        cellsInRange.push(
-          this.gridArea.querySelector(
-            `td[pos-x="${start.x + i}"][pos-y="${start.y + i}"]`
-          )
-        );
+        cellsInRange.push(this.gridArea.querySelector(`td[pos-x="${start.x + i}"][pos-y="${start.y + i}"]`));
       }
     } else if (start.x - end.x === -1 * (start.y - end.y)) {
       const distance = Math.abs(end.x - start.x); //Must take absolute value for distance as it can be negative.
       for (let i = 0; i <= distance; i++) {
         const x = start.x + i * (start.x - end.x > 0 ? -1 : 1);
         const y = start.y + i * (start.y - end.y > 0 ? -1 : 1);
-        cellsInRange.push(
-          this.gridArea.querySelector(`td[pos-x="${x}"][pos-y="${y}"]`)
-        );
+        cellsInRange.push(this.gridArea.querySelector(`td[pos-x="${x}"][pos-y="${y}"]`));
       }
     }
 
@@ -120,18 +110,13 @@ export class Grid {
         //If event triggered while still on the same cell, do nothing.
         if (
           lastSelectedCell &&
-          lastSelectedCell.getAttribute("pos-x") ===
-            event.target.getAttribute("pos-x") &&
-          lastSelectedCell.getAttribute("pos-y") ===
-            event.target.getAttribute("pos-y")
+          lastSelectedCell.getAttribute("pos-x") === event.target.getAttribute("pos-x") &&
+          lastSelectedCell.getAttribute("pos-y") === event.target.getAttribute("pos-y")
         ) {
           return;
         }
         this.selectedCells.forEach((cell) => cell.classList.remove("selected"));
-        this.selectedCells = this.getCellsInLine(
-          this.firstSelectedCell,
-          event.target
-        );
+        this.selectedCells = this.getCellsInLine(this.firstSelectedCell, event.target);
         this.selectedCells.forEach((cell) => {
           if (!cell.classList.contains("found")) {
             cell.classList.add("selected");
