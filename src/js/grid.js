@@ -17,13 +17,13 @@ export class Grid {
     this.foundWords = [];
   }
 
-  init(size = 10) {
+  init(words, size = 10) {
     this.size = size;
     this.wordSelectMode = false;
     this.selectedCells = [];
     this.firstSelectedCell;
     this.gridArea = {};
-    this.words = [];
+    this.words = words;
     this.foundWords = [];
   }
 

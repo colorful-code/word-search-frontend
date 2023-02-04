@@ -16,3 +16,12 @@
     }
   }
 }
+
+.hidden-warning {
+  display: none;
+}
+
+.active-warning {
+  display: inline;
+  color: #ee0000;
+}
