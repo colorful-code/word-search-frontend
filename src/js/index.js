@@ -12,7 +12,7 @@ const sizeWarningLabel = document.querySelector("#size-warning");
 const gameWonSection = document.querySelector("#game-won");
 const omittedWordsSpan = document.querySelector("#omitted-warning");
 
-words = [];
+const words = [];
 const grid = new Grid();
 
 resetBtn.addEventListener("click", (event) => {
