@@ -10,6 +10,7 @@ const lengthWarningLabel = document.querySelector("#word-length-warning");
 const charWarningLabel = document.querySelector("#character-warning");
 const sizeWarningLabel = document.querySelector("#size-warning");
 const gameWonSection = document.querySelector("#game-won");
+const omittedWordsSpan = document.querySelector("#omitted-warning");
 
 words = [];
 const grid = new Grid();
@@ -18,6 +19,7 @@ resetBtn.addEventListener("click", (event) => {
   words = [];
   newGridBtn.disabled = true;
   sizeInput.value = 10;
+  grid.size = sizeInput.value;
   wordListElement.innerHTML = "";
   wordInput.value = "";
   gameWonSection.classList.replace("game-won", "hidden");
@@ -36,6 +38,7 @@ addWordBtn.addEventListener("click", () => {
     words.push(newWord);
     const li = document.createElement("li");
     li.innerHTML = newWord;
+    li.dataset.word = newWord;
     wordListElement.appendChild(li);
   }
 
@@ -89,7 +92,6 @@ sizeInput.addEventListener("input", (event) => {
 newGridBtn.addEventListener("click", async () => {
   if (!sizeInput.value) return; //Don't do anything if no size was entered. This scenario shouldn't be possible as we disable the button on empty field.
 
-  gameWonSection.classList.replace("game-won", "hidden");
   grid.init(words, parseInt(sizeInput.value));
   let result = await fetchGrid(grid);
   grid.renderGrid(result);
@@ -98,8 +100,16 @@ newGridBtn.addEventListener("click", async () => {
 async function fetchGrid(grid) {
   const commaSeperatedWords = grid.words.join(",");
   const response = await fetch(`http://localhost:8080/wordgrid?gridSize=${grid.size}&words=${commaSeperatedWords}`);
-  const result = await response.text();
-  return result.split(" ");
+  const result = await response.json();
+  if (result[1]) {
+    const omittedWords = result[1].split(",");
+    words = words.filter((w) => omittedWords.indexOf(w) === -1);
+    omittedWords.forEach((omittedWord) => document.querySelector(`[data-word="${omittedWord}"]`).remove());
+    omittedWordsSpan.innerHTML =
+      "One or more words have been removed because they couldn't fit with this combination of words and grid size!";
+    grid.words = words;
+  }
+  return result[0].split(" ");
 }
 
 // Checks if input is numeric and larger than 2. Expects input to be string.
