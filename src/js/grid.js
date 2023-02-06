@@ -15,6 +15,7 @@ export class Grid {
     this.gridArea = {};
     this.words = [];
     this.foundWords = [];
+    this.gridArea = document.getElementsByClassName("grid-area")[0];
   }
 
   init(words, size = 10) {
@@ -22,9 +23,9 @@ export class Grid {
     this.wordSelectMode = false;
     this.selectedCells = [];
     this.firstSelectedCell;
-    this.gridArea = {};
     this.words = words;
     this.foundWords = [];
+    document.querySelector("#game-won").classList.replace("game-won", "hidden");
   }
 
   getCellsInLine(firstCell, currentCell) {
@@ -67,7 +68,6 @@ export class Grid {
   }
 
   renderGrid(gridContents) {
-    this.gridArea = document.getElementsByClassName("grid-area")[0];
     if (this.gridArea.lastChild) {
       this.gridArea.removeChild(this.gridArea.lastChild);
     }
@@ -136,13 +136,22 @@ export class Grid {
       const selectedWordReversed = selectedWord.split("").reverse().join("");
 
       if (this.words.indexOf(selectedWord) !== -1) {
-        this.foundWords.push(selectedWord);
+        //Only add the found word once (in case i by random chance generate one of the search words more than once)
+        if (this.foundWords.indexOf(selectedWord) === -1) {
+          this.foundWords.push(selectedWord);
+        }
         this.restyleCells(this.selectedCells, "selected", "found");
       } else if (this.words.indexOf(selectedWordReversed) !== -1) {
-        this.foundWords.push(selectedWordReversed);
+        if (this.foundWords.indexOf(selectedWordReversed) === -1) {
+          this.foundWords.push(selectedWordReversed);
+        }
         this.restyleCells(this.selectedCells, "selected", "found");
       } else {
         this.selectedCells.forEach((cell) => cell.classList.remove("selected"));
+      }
+
+      if (this.foundWords.length === this.words.length) {
+        document.querySelector("#game-won").classList.replace("hidden", "game-won");
       }
       this.selectedCells = [];
     });

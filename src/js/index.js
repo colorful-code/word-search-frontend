@@ -1,7 +1,7 @@
 import { Grid } from "./grid";
 
-const newGridBtn = document.querySelector(".generate-grid");
-const addWordBtn = document.querySelector(".add-word");
+const newGridBtn = document.querySelector("#generate-grid");
+const addWordBtn = document.querySelector("#add-word");
 const resetBtn = document.querySelector("#reset");
 const wordInput = document.querySelector("#word");
 const sizeInput = document.querySelector("#grid-size");
@@ -9,6 +9,7 @@ const wordListElement = document.querySelector("#word-list");
 const lengthWarningLabel = document.querySelector("#word-length-warning");
 const charWarningLabel = document.querySelector("#character-warning");
 const sizeWarningLabel = document.querySelector("#size-warning");
+const gameWonSection = document.querySelector("#game-won");
 
 words = [];
 const grid = new Grid();
@@ -18,6 +19,11 @@ resetBtn.addEventListener("click", (event) => {
   newGridBtn.disabled = true;
   sizeInput.value = 10;
   wordListElement.innerHTML = "";
+  wordInput.value = "";
+  gameWonSection.classList.replace("game-won", "hidden");
+  if (grid.gridArea.lastChild) {
+    grid.gridArea.removeChild(grid.gridArea.lastChild);
+  }
 });
 
 addWordBtn.addEventListener("click", () => {
@@ -38,6 +44,7 @@ addWordBtn.addEventListener("click", () => {
   }
 
   wordInput.value = "";
+  addWordBtn.disabled = true;
 });
 
 // Validate word input is made of letters a-z (case insensitive) and not too long.
@@ -82,6 +89,7 @@ sizeInput.addEventListener("input", (event) => {
 newGridBtn.addEventListener("click", async () => {
   if (!sizeInput.value) return; //Don't do anything if no size was entered. This scenario shouldn't be possible as we disable the button on empty field.
 
+  gameWonSection.classList.replace("game-won", "hidden");
   grid.init(words, parseInt(sizeInput.value));
   let result = await fetchGrid(grid);
   grid.renderGrid(result);
