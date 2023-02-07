@@ -99,7 +99,9 @@ newGridBtn.addEventListener("click", async () => {
 
 async function fetchGrid(grid) {
   const commaSeperatedWords = grid.words.join(",");
-  const response = await fetch(`http://localhost:8080/wordgrid?gridSize=${grid.size}&words=${commaSeperatedWords}`);
+  const response = await fetch(
+    `https://word-search-api.onrender.com/wordgrid?gridSize=${grid.size}&words=${commaSeperatedWords}`
+  );
   const result = await response.json();
   if (result[1]) {
     const omittedWords = result[1].split(",");
